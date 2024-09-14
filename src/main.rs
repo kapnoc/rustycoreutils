@@ -1,8 +1,18 @@
 use std::env;
 use std::process;
+use std::path::Path;
 
 pub mod basename;
 pub mod dirname;
+
+pub fn get_filename(path_str: &str) -> Option<&str> {
+    let path = Path::new(path_str);
+    let filename_str = match path.file_name() {
+        None => None,
+        Some(filename_str) => filename_str.to_str()
+    };
+    return filename_str;
+}
 
 struct Command {
     name: &'static str,
@@ -16,7 +26,7 @@ fn main() {
     ];
 
     let args: Vec<String> = env::args().collect();
-    let mut invoked_command: String = basename::get_filename(&args[0]).unwrap().to_string();
+    let mut invoked_command: String = get_filename(&args[0]).unwrap().to_string();
     let mut error_command: String = invoked_command.clone();
     let mut args_for_command: Vec<String> = args.clone();
     if invoked_command == "rustycoreutils" {
