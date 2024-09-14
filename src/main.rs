@@ -2,6 +2,7 @@ use std::env;
 use std::process;
 
 pub mod basename;
+pub mod dirname;
 
 struct Command {
     name: &'static str,
@@ -11,6 +12,7 @@ struct Command {
 fn main() {
     let implemented_commands = [
         Command { name: "basename", function: basename::basename_cmd },
+        Command { name: "dirname", function: dirname::dirname_cmd },
     ];
 
     let args: Vec<String> = env::args().collect();
