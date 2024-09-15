@@ -1,11 +1,40 @@
 
-pub fn basename_cmd(error_command: String, args: Vec<String>) -> i32 {
-    if args.len() < 2 {
-        eprintln!("{error_command}: Please provide a path");
+use crate::commands;
+use crate::version;
+
+pub const BASENAME_CMD: commands::Command = commands::Command {
+    name: "basename",
+    function: basename_main,
+    options: &[
+        commands::CommandOption {
+            short: 'h',
+            long: "help",
+            value: commands::CommandOptionType::Boolean(None),
+        },
+        commands::CommandOption {
+            short: 'v',
+            long: "version",
+            value: commands::CommandOptionType::Boolean(None),
+        }
+    ]
+};
+
+fn basename_main(invoked_command_for_print: &String, options: Vec<commands::CommandOption>, positional_arguments: Vec<String>) -> i32 {
+    if options.iter().any(|ref x| x.long == "version") {
+        version::print_version_message(invoked_command_for_print);
+        return 0;
+    }
+    if options.iter().any(|ref x| x.long == "help") {
+        todo!("No help here :D");
+        return 0;
+    }
+
+    if positional_arguments.len() < 1 {
+        eprintln!("{invoked_command_for_print}: Please provide a path");
         return 1;
     }
 
-    let path = &args[1];
+    let path = &positional_arguments[0];
     if path.len() == 0 {
         println!("");
         return 0;
@@ -36,8 +65,8 @@ pub fn basename_cmd(error_command: String, args: Vec<String>) -> i32 {
     };
     let basename = &path_without_trailing_slash[basename_start_index..];
 
-    let basename_without_suffix = if args.len() == 3 && args[2].len() != basename.len() {
-        let suffix = &args[2];
+    let basename_without_suffix = if positional_arguments.len() == 2 && positional_arguments[1].len() != basename.len() {
+        let suffix = &positional_arguments[1];
         let suffix_matches: Vec<_> = basename.rmatch_indices(suffix).collect();
         if suffix_matches.len() > 0 && suffix_matches[0].0 == basename.len() - suffix.len() {
             &basename[..suffix_matches[0].0]
