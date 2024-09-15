@@ -13,6 +13,12 @@ pub struct CommandOption {
     pub value: CommandOptionType,
 }
 
+pub const HELP_OPTION: CommandOption = CommandOption {
+    short: 'h',
+    long: "help",
+    value: CommandOptionType::Boolean(None),
+};
+
 pub fn parse_args(invoked_command_for_print: &String, args: &Vec<String>, options: &[CommandOption]) -> (Vec<CommandOption>, Vec<String>) {
     let mut found_options: Vec<CommandOption> = Vec::new();
     let mut positional_arguments: Vec<String> = Vec::new();

@@ -7,16 +7,8 @@ pub const DIRNAME_CMD: commands::Command = commands::Command {
     name: "dirname",
     function: dirname_main,
     options: &[
-        commands::CommandOption {
-            short: 'h',
-            long: "help",
-            value: commands::CommandOptionType::Boolean(None),
-        },
-        commands::CommandOption {
-            short: 'v',
-            long: "version",
-            value: commands::CommandOptionType::Boolean(None),
-        }
+        commands::HELP_OPTION,
+        version::VERSION_OPTION,
     ]
 };
 

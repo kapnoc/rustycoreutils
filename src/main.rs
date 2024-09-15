@@ -22,16 +22,8 @@ fn rustycoreutils_no_command(invoked_command_for_print: &String, args: &Vec<Stri
         &invoked_command_for_print,
         &args,
         &[
-            commands::CommandOption {
-                short: 'h',
-                long: "help",
-                value: commands::CommandOptionType::Boolean(None),
-            },
-            commands::CommandOption {
-                short: 'v',
-                long: "version",
-                value: commands::CommandOptionType::Boolean(None),
-            }
+            commands::HELP_OPTION,
+            version::VERSION_OPTION,
         ]
     );
 

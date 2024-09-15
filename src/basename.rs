@@ -6,16 +6,8 @@ pub const BASENAME_CMD: commands::Command = commands::Command {
     name: "basename",
     function: basename_main,
     options: &[
-        commands::CommandOption {
-            short: 'h',
-            long: "help",
-            value: commands::CommandOptionType::Boolean(None),
-        },
-        commands::CommandOption {
-            short: 'v',
-            long: "version",
-            value: commands::CommandOptionType::Boolean(None),
-        }
+        commands::HELP_OPTION,
+        version::VERSION_OPTION,
     ]
 };
 
