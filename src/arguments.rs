@@ -2,7 +2,7 @@ use std::process;
 
 #[derive(Debug, Clone)]
 pub enum CommandOptionType {
-    Boolean(Option<bool>),
+    Boolean,
     Argument(Option<String>),
 }
 
@@ -13,34 +13,22 @@ pub struct CommandOption {
     pub value: CommandOptionType,
 }
 
-pub const HELP_OPTION: CommandOption = CommandOption {
-    short: 'h',
-    long: "help",
-    value: CommandOptionType::Boolean(None),
-};
-
 pub fn parse_args(invoked_command_for_print: &String, args: &Vec<String>, options: &[CommandOption]) -> (Vec<CommandOption>, Vec<String>) {
     let mut found_options: Vec<CommandOption> = Vec::new();
     let mut positional_arguments: Vec<String> = Vec::new();
     let mut current_multi_arg_option: Option<CommandOption> = None;
     for (fake_i, arg) in args[1..].iter().enumerate() {
         let i = fake_i + 1;
-        match current_multi_arg_option {
-            None => {},
-            Some(ref current_multi_arg_option_unwrapped) => {
-                match current_multi_arg_option_unwrapped.value {
-                    CommandOptionType::Argument(_) => {
-                        found_options.push(CommandOption {
-                            value: CommandOptionType::Argument(Some(arg.clone())),
-                            ..*current_multi_arg_option_unwrapped
-                        });
-                        current_multi_arg_option = None;
-                    },
-                    _ => {},
-                };
-                continue;
-            },
-        };
+        if let Some(ref current_multi_arg_option_unwrapped) = current_multi_arg_option {
+            if let CommandOptionType::Argument(_) = current_multi_arg_option_unwrapped.value {
+                found_options.push(CommandOption {
+                    value: CommandOptionType::Argument(Some(arg.clone())),
+                    ..*current_multi_arg_option_unwrapped
+                });
+                current_multi_arg_option = None;
+            }
+            continue;
+        }
         if arg == "--" {
             positional_arguments.extend_from_slice(&args[i+1..]);
             break;
@@ -49,9 +37,9 @@ pub fn parse_args(invoked_command_for_print: &String, args: &Vec<String>, option
         match found_option_for_arg {
             Some(found_option_for_arg_unwrapped) => {
                 match found_option_for_arg_unwrapped.value {
-                    CommandOptionType::Boolean(_) => {
+                    CommandOptionType::Boolean => {
                         found_options.push(CommandOption {
-                            value: CommandOptionType::Boolean(Some(true)),
+                            value: CommandOptionType::Boolean,
                             ..*found_option_for_arg_unwrapped
                         });
                     },
@@ -79,11 +67,4 @@ pub fn parse_args(invoked_command_for_print: &String, args: &Vec<String>, option
     }
 
     return (found_options.clone(), positional_arguments.clone())
-}
-
-#[derive(Debug, Clone)]
-pub struct Command {
-    pub name: &'static str,
-    pub function: fn (invoked_command_for_print: &String, options: Vec<CommandOption>, positional_arguments: Vec<String>) -> i32,
-    pub options: &'static [CommandOption],
 }

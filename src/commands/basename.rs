@@ -1,4 +1,5 @@
 
+use crate::arguments;
 use crate::commands;
 use crate::version;
 
@@ -11,14 +12,14 @@ pub const BASENAME_CMD: commands::Command = commands::Command {
     ]
 };
 
-fn basename_main(invoked_command_for_print: &String, options: Vec<commands::CommandOption>, positional_arguments: Vec<String>) -> i32 {
+fn basename_main(invoked_command_for_print: &String, options: Vec<arguments::CommandOption>, positional_arguments: Vec<String>) -> i32 {
     if options.iter().any(|ref x| x.long == "version") {
         version::print_version_message(invoked_command_for_print);
         return 0;
     }
     if options.iter().any(|ref x| x.long == "help") {
         todo!("No help here :D");
-        return 0;
+        // return 0;
     }
 
     if positional_arguments.len() < 1 {

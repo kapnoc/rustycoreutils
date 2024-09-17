@@ -1,10 +1,10 @@
 
-use crate::commands;
+use crate::arguments;
 
-pub const VERSION_OPTION: commands::CommandOption = commands::CommandOption {
+pub const VERSION_OPTION: arguments::CommandOption = arguments::CommandOption {
     short: 'v',
     long: "version",
-    value: commands::CommandOptionType::Boolean(None),
+    value: arguments::CommandOptionType::Boolean,
 };
 
 pub fn print_version_message(invoked_command_for_print: &String) {
