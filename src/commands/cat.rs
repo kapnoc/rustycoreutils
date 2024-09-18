@@ -61,5 +61,3 @@ fn cat_main(invoked_command_for_print: &String, options: Vec<arguments::CommandO
 
     return 0;
 }
-
-

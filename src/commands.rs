@@ -4,6 +4,7 @@ use crate::arguments;
 pub mod basename;
 pub mod cat;
 pub mod dirname;
+pub mod wc;
 
 pub const HELP_OPTION: arguments::CommandOption = arguments::CommandOption {
     short: 'h',
@@ -18,8 +19,9 @@ pub struct Command {
     pub options: &'static [arguments::CommandOption],
 }
 
-pub const IMPLEMENTED_COMMANDS: [Command; 3] = [
+pub const IMPLEMENTED_COMMANDS: [Command; 4] = [
     basename::BASENAME_CMD,
     cat::CAT_CMD,
     dirname::DIRNAME_CMD,
+    wc::WC_CMD,
 ];
